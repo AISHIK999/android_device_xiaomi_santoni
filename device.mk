@@ -71,7 +71,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.ipsec_tunnels.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.ipsec_tunnels.xml \
     frameworks/native/data/etc/android.software.midi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.midi.xml \
     frameworks/native/data/etc/android.software.print.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.print.xml \
-    frameworks/native/data/etc/android.software.sip.voip.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.software.vulkan.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml
 
 # Additional native libraries
@@ -168,6 +167,11 @@ PRODUCT_PACKAGES += \
     libdng_sdk.vendor \
     libstdc++.vendor \
     libgui_vendor
+
+# Cgroup and task_profiles
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/cgroups.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
+    $(LOCAL_PATH)/configs/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
 # Component overrides
 PRODUCT_COPY_FILES += \
@@ -375,7 +379,6 @@ PRODUCT_COPY_FILES += \
 
 # Privapp Whitelist
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/permissions/qti_whitelist.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/qti_whitelist.xml \
     $(LOCAL_PATH)/configs/permissions/system-privapp-permissions-qti.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-qti.xml
 
 # QMI
@@ -409,7 +412,7 @@ PRODUCT_PROPERTY_OVERRIDES += persist.vendor.recovery_update=false
 
 # RIL
 PRODUCT_PACKAGES += \
-    android.hardware.secure_element@1.0 \
+    android.hardware.secure_element@1.2 \
     libcnefeatureconfig \
     librmnetctl \
     libprotobuf-cpp-full-vendorcompat \
