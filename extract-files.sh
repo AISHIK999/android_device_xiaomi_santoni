@@ -37,18 +37,18 @@ SECTION=
 while [ "${#}" -gt 0 ]; do
     case "${1}" in
         -n | --no-cleanup )
-                CLEAN_VENDOR=false
-                ;;
+            CLEAN_VENDOR=false
+        ;;
         -k | --kang )
-                KANG="--kang"
-                ;;
+            KANG="--kang"
+        ;;
         -s | --section )
-                SECTION="${2}"; shift
-                CLEAN_VENDOR=false
-                ;;
+            SECTION="${2}"; shift
+            CLEAN_VENDOR=false
+        ;;
         * )
-                SRC="${1}"
-                ;;
+            SRC="${1}"
+        ;;
     esac
     shift
 done
@@ -58,26 +58,29 @@ if [ -z "${SRC}" ]; then
 fi
 
 function blob_fixup() {
-        case "${1}" in
-	system/lib/libwfdnative.so | system/lib64/libwfdnative.so )
-        "${PATCHELF}" --remove-needed "android.hidl.base@1.0.so" "${2}"
+    case "${1}" in
+        system/lib/libwfdnative.so | system/lib64/libwfdnative.so )
+            "${PATCHELF}" --remove-needed "android.hidl.base@1.0.so" "${2}"
         ;;
-	vendor/lib/libmmcamera2_sensor_modules.so )
-        sed -i "s|/system/etc/camera/|/vendor/etc/camera/|g" "${2}"
+        vendor/lib/libmmcamera2_sensor_modules.so )
+            sed -i "s|/system/etc/camera/|/vendor/etc/camera/|g" "${2}"
         ;;
-	vendor/lib/libmmcamera_dbg.so )
-        sed -i "s|persist.camera.debug.logfile|persist.vendor.camera.dbglog|g" "${2}"
+        vendor/lib/libmmcamera_dbg.so )
+            sed -i "s|persist.camera.debug.logfile|persist.vendor.camera.dbglog|g" "${2}"
         ;;
-	vendor/etc/init/android.hardware.gnss@2.1-service-qti.rc )
-        sed -i -e "$a\\    capabilities NET_BIND_SERVICE" "${2}"
+        vendor/etc/init/android.hardware.gnss@2.1-service-qti.rc )
+            sed -i -e "$a\\    capabilities NET_BIND_SERVICE" "${2}"
         ;;
-	vendor/lib/libmmcamera2_stats_modules.so | vendor/lib/libmmcamera_ppeiscore.so | vendor/lib64/libmmsw_detail_enhancement.so | vendor/lib64/libmmsw_platform.so )
-        "${PATCHELF}" --replace-needed "libgui.so" "libwui.so" "${2}"
+        vendor/lib/libmmcamera2_stats_modules.so | vendor/lib/libmmcamera_ppeiscore.so | vendor/lib64/libmmsw_detail_enhancement.so | vendor/lib64/libmmsw_platform.so )
+            "${PATCHELF}" --replace-needed "libgui.so" "libwui.so" "${2}"
         ;;
-	vendor/lib/hw/sound_trigger.primary.msm8937.so )
-        sed -i "s|msm8937|msm8953|g" "${2}"
+        vendor/lib/hw/sound_trigger.primary.msm8937.so )
+            sed -i "s|msm8937|msm8953|g" "${2}"
         ;;
-        esac
+        vendor/lib/sensors.ssc.so | vendor/lib64/sensors.ssc.so )
+            "${PATCHELF}" --remove-needed "liblocationservice.so" "${2}"
+        ;;
+    esac
 }
 
 # Goodix
@@ -89,10 +92,10 @@ patchelf --add-needed fakelogprint.so gxfingerprint.default.so
 setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" false "${CLEAN_VENDOR}"
 
 extract "${MY_DIR}"/proprietary-files.txt "${SRC}" \
-	"${KANG}" --section "${SECTION}"
+"${KANG}" --section "${SECTION}"
 extract "${MY_DIR}"/proprietary-files-qc.txt "$SRC" \
-	"${KANG}" --section "${SECTION}"
+"${KANG}" --section "${SECTION}"
 extract "${MY_DIR}"/proprietary-files-qc-caf.txt "$SRC" \
-	"${KANG}" --section "${SECTION}"
+"${KANG}" --section "${SECTION}"
 
 "${MY_DIR}"/setup-makefiles.sh
