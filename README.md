@@ -1,42 +1,4 @@
 # Device Tree for Xiaomi Redmi 4X (santoni)
-
-### 1. Initialize Repo and sync ROM
-```bash
-$ mkdir "romname or anything"
-$ cd "romname or anything"
-$ repo init -u "take manifest link from ROM readme" "take ROM branch from ROM readme"
-$ repo sync --force-sync -j$(nproc --all)
-```
-### 2. Clone trees:
-```bash
-git clone -b 11.0 https://github.com/Jabiyeff-Project/device-santoni device/xiaomi/santoni
-git clone -b 11.0 https://github.com/Jabiyeff-Project/vendor-santoni vendor/xiaomi
-git clone -b 11.0 https://github.com/Jabiyeff-Project/kernel-santoni kernel/xiaomi/santoni
-```
-### 2.1. If your need custom kernel:
-```bash
-$ git clone -b "kernel branch" "kernel github link" kernel/xiaomi/msm8937
-```
-### 3. Start building ROMs
-```bash
-$ . build/envsetup.sh
-$ lunch "romname"_santoni-userdebug
-$ m bacon
-```
-### 3.1. Fix Mobile Network problem on some ROMs
-Before build ROM (Use this command on ROM source folder):
-```bash
-sed -i '/qti-telephony-common.jar/d' vendor/xiaomi/santoni/santoni-vendor.mk
-```
-After build ROM:
-remove /system/system_ext/framework/qti-telephony-common.jar
-
-### 3.2. How to use custom kernel source (Not recommended)
-Clone kernel source on kernel/xiaomi/msm8937 path, ROM will be use it.
-
-### 3.3. How to add new ROM support
-Hard to explain, just contact me on [Telegram](https://t.me/jabiyeff21), I will add ROM support which your need (except CAF based ROMs)
-
 ## Spec Sheet
 
 | Feature                 | Specification                     |
