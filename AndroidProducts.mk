@@ -1,8 +1,8 @@
 # conquerOS
 PRODUCT_MAKEFILES += \
-    $(LOCAL_DIR)/conquer_santoni.mk
+    $(LOCAL_DIR)/cygnus_santoni.mk
 
 COMMON_LUNCH_CHOICES += \
-    conquer_santoni-userdebug \
-    conquer_santoni-user \
-    conquer_santoni-eng
+    cygnus_santoni-userdebug \
+    cygnus_santoni-user \
+    cygnus_santoni-eng
